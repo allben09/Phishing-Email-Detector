@@ -1,0 +1,38 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="phishing-email-detector",
+    version="2.0.0",
+    author="Allben Rakgoale",
+    author_email="allben@example.com",
+    description="Advanced phishing email detection with ML and threat intelligence",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
+    url="https://github.com/allben09/Phishing-Email-Detector",
+    packages=find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Topic :: Security",
+        "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    ],
+    python_requires=">=3.9",
+    install_requires=[
+        "fastapi>=0.104.0",
+        "uvicorn>=0.24.0",
+        "scikit-learn>=1.3.0",
+        "transformers>=4.36.0",
+        "torch>=2.1.0",
+        "pandas>=2.0.0",
+        "numpy>=1.24.0",
+        "redis>=5.0.0",
+        "celery>=5.3.0",
+        "python-dotenv>=1.0.0",
+        "requests>=2.31.0",
+        "pyyaml>=6.0.0",
+        "jinja2>=3.1.0",
+        "aiofiles>=23.2.0",
+        "loguru>=0.7.0",
+    ],
+)
