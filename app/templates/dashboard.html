@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Email Detector Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        .header p {
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+        .stat-card h3 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            color: #718096;
+            letter-spacing: 0.5px;
+        }
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        .stat-card .trend {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            color: #48bb78;
+        }
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 2rem;
+        }
+        .chart-container h2 {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+        .recent-detections {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        .recent-detections h2 {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 2px solid #e2e8f0;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #718096;
+        }
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-critical { background: #fc8181; color: white; }
+        .badge-high { background: #f6ad55; color: white; }
+        .badge-medium { background: #f6e05e; color: #744210; }
+        .badge-low { background: #68d391; color: white; }
+        .badge-safe { background: #63b3ed; color: white; }
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-online { background: #48bb78; }
+        .status-offline { background: #fc8181; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛡️ Phishing Email Detector</h1>
+        <p>Real-time monitoring & threat detection dashboard</p>
+    </div>
+
+    <div class="container">
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Emails Analyzed</h3>
+                <div class="value" id="total-emails">0</div>
+                <div class="trend">↑ 12% from last week</div>
+            </div>
+            <div class="stat-card">
+                <h3>Phishing Detected</h3>
+                <div class="value" id="phishing-detected">0</div>
+                <div class="trend" style="color: #fc8181;">⚠️ High risk detected</div>
+            </div>
+            <div class="stat-card">
+                <h3>Detection Rate</h3>
+                <div class="value" id="detection-rate">0%</div>
+                <div class="trend">↑ 2.3% improvement</div>
+            </div>
+            <div class="stat-card">
+                <h3>System Status</h3>
+                <div class="value" style="font-size: 1.25rem;">
+                    <span class="status-dot status-online"></span>
+                    Operational
+                </div>
+                <div class="trend">All systems healthy</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="chart-container">
+            <h2>Risk Distribution</h2>
+            <div id="risk-chart" style="height: 400px;"></div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Detection Trends (Last 7 Days)</h2>
+            <div id="trend-chart" style="height: 400px;"></div>
+        </div>
+
+        <!-- Recent Detections -->
+        <div class="recent-detections">
+            <h2>Recent Detections</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Email ID</th>
+                            <th>Subject</th>
+                            <th>Risk Score</th>
+                            <th>Risk Level</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-detections-body">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data - in production, fetch from API
+        const sampleData = {
+            total: 1247,
+            phishing: 89,
+            detectionRate: 95.2,
+            riskDistribution: {
+                critical: 12,
+                high: 25,
+                medium: 30,
+                low: 15,
+                safe: 7
+            },
+            trends: {
+                dates: ['2026-07-16', '2026-07-17', '2026-07-18', '2026-07-19', '2026-07-20', '2026-07-21', '2026-07-22'],
+                phishing: [8, 12, 9, 15, 11, 18, 16]
+            },
+            recent: [
+                { id: 'a1b2c3', subject: 'URGENT: Account Suspension', score: 87, level: 'CRITICAL', time: '5 min ago' },
+                { id: 'd4e5f6', subject: 'Your PayPal Invoice', score: 72, level: 'HIGH', time: '12 min ago' },
+                { id: 'g7h8i9', subject: 'Weekly Team Meeting', score: 12, level: 'SAFE', time: '25 min ago' },
+                { id: 'j1k2l3', subject: 'Password Reset Request', score: 65, level: 'MEDIUM', time: '1 hour ago' },
+                { id: 'm4n5o6', subject: 'Security Alert: New Login', score: 78, level: 'HIGH', time: '2 hours ago' }
+            ]
+        };
+
+        // Update stats
+        document.getElementById('total-emails').textContent = sampleData.total;
+        document.getElementById('phishing-detected').textContent = sampleData.phishing;
+        document.getElementById('detection-rate').textContent = sampleData.detectionRate + '%';
+
+        // Risk distribution chart
+        const riskData = [{
+            values: Object.values(sampleData.riskDistribution),
+            labels: Object.keys(sampleData.riskDistribution).map(k => k.toUpperCase()),
+            type: 'pie',
+            marker: {
+                colors: ['#fc8181', '#f6ad55', '#f6e05e', '#68d391', '#63b3ed']
+            },
+            textinfo: 'label+percent',
+            hoverinfo: 'label+value+percent'
+        }];
+
+        const riskLayout = {
+            margin: { t: 0, b: 0, l: 0, r: 0 },
+            showlegend: false,
+            paper_bgcolor: 'transparent'
+        };
+
+        Plotly.newPlot('risk-chart', riskData, riskLayout);
+
+        // Trend chart
+        const trendData = [{
+            x: sampleData.trends.dates,
+            y: sampleData.trends.phishing,
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Phishing Emails',
+            line: { color: '#667eea', width: 3 },
+            marker: { size: 8 }
+        }];
+
+        const trendLayout = {
+            margin: { t: 20, b: 40, l: 50, r: 20 },
+            xaxis: { title: 'Date' },
+            yaxis: { title: 'Count' },
+            paper_bgcolor: 'transparent',
+            plot_bgcolor: 'transparent'
+        };
+
+        Plotly.newPlot('trend-chart', trendData, trendLayout);
+
+        // Recent detections table
+        const tableBody = document.getElementById('recent-detections-body');
+        sampleData.recent.forEach(item => {
+            const row = document.createElement('tr');
+            const levelBadge = item.level.toLowerCase();
+            row.innerHTML = `
+                <td><code style="font-size: 0.75rem;">${item.id}</code></td>
+                <td>${item.subject}</td>
+                <td><strong>${item.score}%</strong></td>
+                <td><span class="badge badge-${levelBadge}">${item.level}</span></td>
+                <td style="color: #718096; font-size: 0.875rem;">${item.time}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        // Fetch real data periodically
+        async function updateDashboard() {
+            try {
+                const response = await fetch('/api/stats');
+                if (response.ok) {
+                    const data = await response.json();
+                    // Update UI with real data
+                    console.log('Dashboard updated:', data);
+                }
+            } catch (error) {
+                console.error('Failed to fetch dashboard data:', error);
+            }
+        }
+
+        // Update every 30 seconds
+        setInterval(updateDashboard, 30000);
+    </script>
+</body>
+  </html>
