@@ -1,0 +1,17 @@
+detection:
+  ml_weight: 0.35
+  header_weight: 0.15
+  url_weight: 0.20
+  
+thresholds:
+  critical: 85
+  high: 70
+  medium: 45
+
+threat_intel:
+  virustotal: true
+  cache_ttl: 3600
+
+scoring:
+  urgency_penalty: 10
+  url_penalty: 15
