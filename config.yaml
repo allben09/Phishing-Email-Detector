@@ -1,17 +1,55 @@
+app:
+  name: "Phishing Email Detector"
+  version: "2.0.0"
+  debug: true
+  
 detection:
   ml_weight: 0.35
   header_weight: 0.15
   url_weight: 0.20
+  attachment_weight: 0.15
+  threat_intel_weight: 0.15
   
 thresholds:
   critical: 85
   high: 70
   medium: 45
-
+  low: 20
+  
+ml:
+  model_path: "app/models/phishing_model.pkl"
+  transformer_model: "distilbert-base-uncased"
+  max_features: 5000
+  ngram_range: [1, 3]
+  
+analysis:
+  max_urls: 20
+  max_attachments: 10
+  max_body_size: 10485760  # 10MB
+  
 threat_intel:
-  virustotal: true
-  cache_ttl: 3600
-
+  virustotal: 
+    enabled: true
+    cache_ttl: 3600
+  abuseipdb:
+    enabled: true
+    cache_ttl: 3600
+  google_safe_browsing:
+    enabled: true
+    cache_ttl: 3600
+    
 scoring:
   urgency_penalty: 10
   url_penalty: 15
+  header_penalty: 20
+  attachment_penalty: 25
+  
+security:
+  jwt_secret: "your-secret-key-change-in-production"
+  jwt_expiration: 3600
+  rate_limit: 100  # requests per minute
+  
+logging:
+  level: "INFO"
+  format: "json"
+  file: "logs/phishing_detector.log"
