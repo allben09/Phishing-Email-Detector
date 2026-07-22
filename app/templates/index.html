@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Email Detector</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                🛡️ Phishing Email Detector
+            </div>
+            <ul class="navbar-links">
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/docs">API Docs</a></li>
+                <li><a href="https://github.com/allben09/Phishing-Email-Detector" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div style="max-width: 1200px; margin: 2rem auto; padding: 0 2rem;">
+        <div class="card fade-in">
+            <h1 style="margin-bottom: 1rem;">🔍 Email Phishing Detector</h1>
+            <p style="color: #718096; margin-bottom: 2rem;">
+                Paste your email content below to analyze for phishing indicators.
+            </p>
+
+            <form id="analyze-form">
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <input type="text" name="subject" class="form-control" placeholder="Enter email subject">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Sender</label>
+                    <input type="email" name="sender" class="form-control" placeholder="sender@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Body</label>
+                    <textarea name="body" class="form-control" rows="10" placeholder="Paste the email body here..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    🔍 Analyze Email
+                </button>
+            </form>
+
+            <div id="error-container" style="margin-top: 1rem;"></div>
+            <div id="analysis-result" style="margin-top: 2rem;"></div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+            <h2 style="margin-bottom: 1rem;">📊 Quick Stats</h2>
+            <div class="grid grid-cols-4" style="text-align: center;">
+                <div>
+                    <div style="font-size: 0.875rem; color: #718096;">Total Analyzed</div>
+                    <div style="font-size: 2rem; font-weight: 600;" id="total-emails">0</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.875rem; color: #718096;">Phishing Detected</div>
+                    <div style="font-size: 2rem; font-weight: 600; color: #fc8181;" id="phishing-detected">0</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.875rem; color: #718096;">Detection Rate</div>
+                    <div style="font-size: 2rem; font-weight: 600; color: #48bb78;" id="detection-rate">0%</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.875rem; color: #718096;">Status</div>
+                    <div style="font-size: 1.25rem; font-weight: 600;">
+                        <span class="status-dot status-online"></span>
+                        Online
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+  </html>
