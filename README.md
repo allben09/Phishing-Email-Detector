@@ -4,8 +4,14 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104.0-green.svg)](https://fastapi.tiangolo.com)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![CI/CD](https://github.com/allben09/Phishing-Email-Detector/actions/workflows/ci.yml/badge.svg)](https://github.com/allben09/Phishing-Email-Detector/actions)
+[![Codecov](https://codecov.io/gh/allben09/Phishing-Email-Detector/branch/main/graph/badge.svg)](https://codecov.io/gh/allben09/Phishing-Email-Detector)
 
 An enterprise-grade phishing detection system combining **Machine Learning Ensemble**, **Real-time Threat Intelligence**, and **Comprehensive Email Analysis**.
+
+## 📊 Live Demo
+
+🚀 **Try it now**: [Phishing Email Detector Demo](https://phishing-detector-demo.herokuapp.com)
 
 ## ✨ Features
 
