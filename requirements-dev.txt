@@ -1,0 +1,25 @@
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+pytest-mock==3.12.0
+
+# Linting & Formatting
+black==23.11.0
+flake8==6.1.0
+mypy==1.7.0
+isort==5.12.0
+
+# Security
+bandit==1.7.5
+safety==2.3.5
+
+# Documentation
+sphinx==7.2.6
+sphinx-rtd-theme==2.0.0
+
+# Pre-commit
+pre-commit==3.5.0
+
+# Monitoring
+prometheus-client==0.19.0
