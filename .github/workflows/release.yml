@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Build package
+      run: |
+        python -m pip install --upgrade pip
+        pip install build
+        python -m build
+    
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
+    
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: |
+          ${{ secrets.DOCKER_USERNAME }}/phishing-detector:${{ github.ref_name }}
+          ${{ secrets.DOCKER_USERNAME }}/phishing-detector:latest
+    
+    - name: Generate release notes
+      run: |
+        echo "# Release ${{ github.ref_name }}" > release_notes.md
+        echo "" >> release_notes.md
+        echo "## 🚀 Features" >> release_notes.md
+        echo "- [x] Machine Learning Ensemble" >> release_notes.md
+        echo "- [x] Real-time Threat Intelligence" >> release_notes.md
+        echo "- [x] Email Header Analysis" >> release_notes.md
+        echo "- [x] URL Analysis" >> release_notes.md
+        echo "- [x] Attachment Scanning" >> release_notes.md
+        echo "" >> release_notes.md
+        echo "## 📦 Installation" >> release_notes.md
+        echo "\`\`\`bash" >> release_notes.md
+        echo "pip install phishing-email-detector" >> release_notes.md
+        echo "\`\`\`" >> release_notes.md
+        echo "" >> release_notes.md
+        echo "## 🐳 Docker" >> release_notes.md
+        echo "\`\`\`bash" >> release_notes.md
+        echo "docker pull ${{ secrets.DOCKER_USERNAME }}/phishing-detector:${{ github.ref_name }}" >> release_notes.md
+        echo "\`\`\`" >> release_notes.md
+    
+    - name: Update release
+      uses: softprops/action-gh-release@v1
+      with:
+        body_path: release_notes.md
+        files: |
+          dist/*
