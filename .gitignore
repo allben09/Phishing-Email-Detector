@@ -23,11 +23,6 @@ htmlcov/
 *.log
 logs/
 
-# Data
-data/
-*.pkl
-*.db
-
 # Environment
 .env
 .env.local
@@ -38,13 +33,6 @@ data/
 # OS
 .DS_Store
 Thumbs.db
-
-# Model files
-*.pkl
-*.joblib
-*.h5
-*.pt
-*.pth
 
 # Cache
 __pycache__/
