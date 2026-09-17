@@ -56,7 +56,7 @@ class AdvancedPhishingDetector:
             "is_phishing": bool(prediction == 1),
             "confidence": confidence,
             "label": "phishing" if prediction == 1 else "legitimate",
-        }import os
+        import os
 import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
