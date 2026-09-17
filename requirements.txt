@@ -1,11 +1,15 @@
 fastapi
 uvicorn[standard]
+jinja2
+loguru
+python-multipart
+python-dotenv
+pyyaml
 scikit-learn
 transformers
 torch
 pandas
 numpy
 pydantic
-python-multipart
 joblib
 requests
